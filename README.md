@@ -9,88 +9,97 @@
 #include "queue"
 #include "unordered_map"
 using namespace std;
-
+// Sử dụng recursion
 class Solution{
 private:
-    void Swap(int& a, int& b){
-        int tmp = a;
-        a = b;
-        b = tmp;
-    }
-    void reverse_string(string& input){
-        int left = 0;
-        int right = input.length() - 1;
-        while(left < right){
-            Swap(input[left], input[right]);
-            left++;
-            right--;
-        }
-    }
+    unordered_map<int, long long> store_value; // map có key : int, value : long long, lưu số fibonacci đã tính
 public:
-    // bai 1
-    int sum_of_number(int input){
-        return (input * (input + 1)) / 2;        
-    }
-    /*
-    int sum_of_number(int input){
-        int answer = 0;
-        for(int i = 1;i<=input;i++){
-            answer += i;
+    // bai 1 : tinh N!
+    int factorial_of_number(int number){
+        if(number == 1){
+            return 1;
         }
-        return answer;
+        return number * factorial_of_number(number - 1); // ex: n = 5 -> 5 * 4 * 3 * 2 * 1
+    }
+    // bai 2 : fibonacci
+    
+    int Fibonacci(int number){
+        if(number == 0){
+            return 0;
+        }else if(number == 1){
+            return 1;
+        }
+        return Fibonacci(number-2) + Fibonacci(number-1); // o(2^n) time complexity
+    }
+    /* better solution, use map to store fibonacci, time complexity change from o(2^n) to o(n)
+    long long Fibonacci(int number){
+        if(number == 1){
+            return 1;
+        }else if(number == 0){
+            return 0;
+        }else if(store_value[number] != 0){
+            return store_value[number];
+        }
+        store_value[number] = Fibonacci(number-1) + Fibonacci(number-2);
+        return store_value[number];
     }
     */
-
-    // bai 2
-    string dec_to_bin(int decimal){
-        string answer = "";
-        while(decimal != 0){
-            answer = (char)((decimal % 2) + '0') + answer; // ghép phần dư vào trước kết quả -> dảo ngược
-            decimal /= 2;
+    // bai 3 : decimal to binary
+    string dec_to_bin(int number){
+        if(number == 0){
+            return "0";
         }
-        return answer;
-    }    
-    // bai 3
-    bool isPalindrome(int input){
-        int temp_num = 0;
-        int modify_num = input;
-        while(modify_num != 0){
-            int get_num = modify_num % 10;
-            temp_num = (temp_num * 10) + get_num; // ex: 1 * 10 = 10, 10 + 2 = 12 
-            modify_num /= 10;
-        }
-        return temp_num == input; // true = palindrome
+        char get_num = ((number % 2) + '0'); // 0(int) + '0'(48) == '0' / 1(int) + '0'(48) == '1'
+        return  dec_to_bin(number / 2) + get_num ;
     }
-    // bai 4
-    bool isArmstrong(int number){
-        int temporary = number;
-        while(temporary != 0){
-            int num = temporary % 10;
-            int power_of_three = num * num * num;
-            number -= power_of_three;
-            temporary /= 10;
+    // bai 4 : (n * (n+1)) / 2
+    int sum_of_n_number(int n){
+        if(n == 0){
+            return 0;
         }
-        return number == 0;
+        return n + sum_of_n_number(n-1);
+    }
+    // bai 5 : sum_of_odd_num from 1-> 2n + 1
+    int sum_of_odd_num(int n){
+        if(n == 0){
+            return 1;
+        }
+        
+        return ((2 * n) + 1) + sum_of_odd_num(n-1);    
+    }
+    // bai 6 : product_of_odd_num from 1 -> 2n + 1
+    int product_of_odd_num(int n){
+        if(n == 0){
+            return 1;
+        }
+        
+        return ((2 * n) + 1) * product_of_odd_num(n-1);
+    }
+    // bai 7 : tong 1^2 -> n^2
+    int sum_of_power(int n){
+        if(n == 1){
+            return 1;
+        }
+        return (n*n) + sum_of_power(n-1);
     }
 };
 
 
 
 int main(){
+	/* có thể bỏ phần này để chạy ở màn hình console thay vì đọc ghi file
 	#ifndef ONLINE_JUDGE
 	freopen("input.txt","r",stdin);
 	freopen("output.txt", "w",stdout);
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	#endif
+	*/ 
     Solution solution;
-    int n;
-    cin >> n;
-	cout << solution.sum_of_number(n);
-    cout << '\n' << solution.dec_to_bin(25);
-    cout << '\n' << solution.isPalindrome(1212);
-    string answer = solution.isArmstrong(15) ? "True" : "False";
+    cout << solution.Fibonacci(9);
+    string answer = solution.dec_to_bin(6);
     cout << '\n' << answer;
+    cout << '\n' << solution.sum_of_odd_num(3);
+    cout << '\n' << solution.product_of_odd_num(3);
+    cout << '\n' << solution.sum_of_power(3);
 }
-
-	
