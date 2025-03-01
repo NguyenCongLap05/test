@@ -1,49 +1,80 @@
-// LAB 1. ngôn ngữ cơ bản
-
 #include "iostream"
-#include "iomanip"
+#include "vector"
+#include "algorithm"
+#include "cmath"
+#include "string"
+#include "set"
+#include "map"
+#include "stack"
+#include "queue"
+#include "unordered_map"
 using namespace std;
-// bài 1
-int two_sum_with_formula(int first_num, int second_num){
-	return (first_num * first_num) + (second_num * second_num);
-}
-// bài 2
-double F_to_C(double F){
-	return 5* (F - 32) / 9;
-}
-// Bài 3
-int biggest_num(int first, int second, int third){
-	int temporary = first >= second ? first : second;
-	return temporary >= third ? temporary : third;
-}
-// bài 4
-void seconds_to_hour(int totalSeconds) {
-    int hours = totalSeconds / 3600;
-    int minutes = (totalSeconds % 3600) / 60;
-    int seconds = totalSeconds % 60;
 
-    std::cout << hours << " hours, " << minutes << " mins, " << seconds << " secs\n";
-}
-/* bài 5
- */
-int first_sum(int n){
-	int answer = 0;
-	int i = 1;
-	while(i<=n){
-		answer += (1.0 / i);
-		i++;
-	}
-	return answer;
-}
-int second_sum(int n){
-	int answer = 0;
-	int i = 1;
-	while(i <= n){
-		answer += i * i;
-		i++;
-	}
-	return answer;
-}
+class Solution{
+private:
+    void Swap(int& a, int& b){
+        int tmp = a;
+        a = b;
+        b = tmp;
+    }
+    void reverse_string(string& input){
+        int left = 0;
+        int right = input.length() - 1;
+        while(left < right){
+            Swap(input[left], input[right]);
+            left++;
+            right--;
+        }
+    }
+public:
+    // bai 1
+    int sum_of_number(int input){
+        return (input * (input + 1)) / 2;        
+    }
+    /*
+    int sum_of_number(int input){
+        int answer = 0;
+        for(int i = 1;i<=input;i++){
+            answer += i;
+        }
+        return answer;
+    }
+    */
+
+    // bai 2
+    string dec_to_bin(int decimal){
+        string answer = "";
+        while(decimal != 0){
+            answer = (char)((decimal % 2) + '0') + answer; // ghép phần dư vào trước kết quả -> dảo ngược
+            decimal /= 2;
+        }
+        return answer;
+    }    
+    // bai 3
+    bool isPalindrome(int input){
+        int temp_num = 0;
+        int modify_num = input;
+        while(modify_num != 0){
+            int get_num = modify_num % 10;
+            temp_num = (temp_num * 10) + get_num; // ex: 1 * 10 = 10, 10 + 2 = 12 
+            modify_num /= 10;
+        }
+        return temp_num == input; // true = palindrome
+    }
+    // bai 4
+    bool isArmstrong(int number){
+        int temporary = number;
+        while(temporary != 0){
+            int num = temporary % 10;
+            int power_of_three = num * num * num;
+            number -= power_of_three;
+            temporary /= 10;
+        }
+        return number == 0;
+    }
+};
+
+
 
 int main(){
 	#ifndef ONLINE_JUDGE
@@ -52,13 +83,14 @@ int main(){
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	#endif
-	int n;
-	cin >> n;
-	unsigned int fibonacci[2] = {0,1};
-	for(int i = 2;i<=n;i++){
-		fibonacci[i % 2] = fibonacci[0] + fibonacci[1];
-		cout << "[" << i << "][" << i%2 << "] " <<fibonacci[i % 2] << '\n';
-	}
-	
-
+    Solution solution;
+    int n;
+    cin >> n;
+	cout << solution.sum_of_number(n);
+    cout << '\n' << solution.dec_to_bin(25);
+    cout << '\n' << solution.isPalindrome(1212);
+    string answer = solution.isArmstrong(15) ? "True" : "False";
+    cout << '\n' << answer;
 }
+
+	
